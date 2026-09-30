@@ -1,5 +1,9 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+
+// Overrides the site-wide "index, follow" so the 404 never sends conflicting robots tags.
+export const metadata: Metadata = { title: "Page not found", robots: { index: false, follow: true } };
 
 export default function NotFound() {
   return (
@@ -13,7 +17,7 @@ export default function NotFound() {
       />
       <p className="relative label-mono text-blood">Error 404</p>
       <h1 className="relative mt-4 font-display text-[26vw] leading-[0.8] md:text-[16vw]">
-        DAMN<span className="text-outline-red">.</span>
+        GONE<span className="text-outline-red">.</span>
       </h1>
       <p className="relative mt-6 max-w-sm text-sm uppercase text-white/55">Nothing here. Maybe it sold out. Maybe it never existed.</p>
       <Link

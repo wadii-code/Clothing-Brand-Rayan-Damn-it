@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Providers } from "@/components/providers";
+import { defaultOgImage, siteUrl } from "@/lib/seo";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -27,17 +28,30 @@ const jetbrains = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(siteUrl),
   title: { default: `${site.name} — Underground Streetwear`, template: `%s — ${site.name}` },
   description: site.description,
+  applicationName: site.name,
+  category: "shopping",
+  keywords: ["streetwear", "underground", "hoodies", "baggy jeans", "embroidered", "Morocco", "Maroc", "cash on delivery"],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
+  },
   openGraph: {
     type: "website",
     siteName: site.name,
+    locale: "en_US",
     title: `${site.name} — Underground Streetwear`,
     description: site.description,
-    images: [{ url: "/products/lookbook-hoodie.jpg", width: 2400, height: 1090 }],
+    images: [defaultOgImage],
   },
   twitter: { card: "summary_large_image" },
+  // Google Search Console → HTML tag method: put the content="…" value in GOOGLE_SITE_VERIFICATION.
+  ...(process.env.GOOGLE_SITE_VERIFICATION && {
+    verification: { google: process.env.GOOGLE_SITE_VERIFICATION },
+  }),
 };
 
 export const viewport: Viewport = {

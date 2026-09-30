@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CodSteps } from "@/components/home/cod-steps";
 import { FeaturedSlider } from "@/components/home/featured-slider";
@@ -5,12 +6,20 @@ import { Hero } from "@/components/home/hero";
 import { Lookbook } from "@/components/home/lookbook";
 import { Manifesto } from "@/components/home/manifesto";
 import { Marquee } from "@/components/home/marquee";
+import { JsonLd } from "@/components/json-ld";
 import { LockedCard, ProductCard } from "@/components/product/product-card";
 import { Arrow } from "@/components/ui/arrow";
 import { getProducts } from "@/lib/products";
+import { organizationJsonLd, pageSeo } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = pageSeo({
+  title: `${site.name} — Underground Streetwear`,
+  description: site.description,
+  path: "/",
+});
 
 const GRID_SLOTS = 4;
 
@@ -49,6 +58,7 @@ export default async function HomePage() {
       <Manifesto />
       <Lookbook />
       <CodSteps />
+      <JsonLd data={organizationJsonLd()} />
     </>
   );
 }

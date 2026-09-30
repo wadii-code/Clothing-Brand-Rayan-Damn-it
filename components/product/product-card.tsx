@@ -93,6 +93,7 @@ export function LockedCard({ index = 0, label = "Drop 02" }: { index?: number; l
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.9, delay: (index % 4) * 0.1, ease: [0.16, 1, 0.3, 1] }}
       className="group"
+      role="group"
       aria-label={`${label} — coming soon`}
     >
       <div className="relative flex aspect-[3/4] items-center justify-center overflow-hidden border border-white/10 bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.025)_0_2px,transparent_2px_14px)]">

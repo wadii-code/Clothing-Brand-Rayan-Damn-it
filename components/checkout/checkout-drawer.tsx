@@ -10,6 +10,32 @@ type Props = {
   onClose: () => void;
 };
 
+const FOCUSABLE = ["a[href]", "button", "input:not([type=hidden])", "select", "textarea", "[tabindex]"]
+  .map((selector) => `${selector}:not([disabled]):not([tabindex="-1"])`)
+  .join(",");
+
+// Keeps Tab / Shift+Tab cycling inside the dialog instead of reaching the page behind it.
+function trapFocus(e: KeyboardEvent, container: HTMLElement | null) {
+  if (!container) return;
+  const focusable = [...container.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
+    (el) => el.getClientRects().length > 0,
+  );
+  if (focusable.length === 0) return;
+
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  const active = document.activeElement;
+  const outside = !container.contains(active);
+
+  if (e.shiftKey && (active === first || active === container || outside)) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && (active === last || outside)) {
+    e.preventDefault();
+    first.focus();
+  }
+}
+
 export function CheckoutDrawer({ checkout, onClose }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
   const isOpen = checkout !== null;
@@ -23,6 +49,7 @@ export function CheckoutDrawer({ checkout, onClose }: Props) {
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
+      if (e.key === "Tab") trapFocus(e, panelRef.current);
     };
     window.addEventListener("keydown", onKey);
     return () => {

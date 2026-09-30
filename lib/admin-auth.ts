@@ -2,7 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 
-const COOKIE_NAME = "dmn_rayan";
+const COOKIE_NAME = "skr_rayan";
 const SESSION_SECONDS = 60 * 60 * 12;
 
 function adminPassword(): string | null {
@@ -15,7 +15,7 @@ function digest(value: string): Buffer {
 }
 
 function sign(payload: string, password: string): string {
-  const key = digest(`damnit-rayan-session:${password}`);
+  const key = digest(`skiro-rayan-session:${password}`);
   return createHmac("sha256", key).update(payload).digest("base64url");
 }
 

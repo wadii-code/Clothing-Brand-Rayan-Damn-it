@@ -50,7 +50,7 @@ export function Footer() {
       </div>
 
       <div aria-hidden className="mt-16 flex select-none justify-center px-2 md:mt-24">
-        {"DAMNIT".split("").map((letter, i) => (
+        {"SKIRO".split("").map((letter, i) => (
           <span
             key={i}
             className="font-display text-[27vw] leading-[0.78] text-outline transition-[color,-webkit-text-stroke-color] duration-300 hover:text-blood hover:[-webkit-text-stroke-color:var(--color-blood)]"

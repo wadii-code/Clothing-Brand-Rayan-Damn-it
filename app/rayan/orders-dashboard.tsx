@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useOptimistic, useState, useTransition } from "react";
+import { useDeferredValue, useEffect, useMemo, useOptimistic, useState, useTransition } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Star } from "@/components/ui/star";
 import { cn, formatOrderDate, formatPrice } from "@/lib/format";
@@ -27,6 +27,8 @@ export function OrdersDashboard({ orders, error }: { orders: Order[]; error: str
   const [, startUpdate] = useTransition();
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
+  // Typing stays instant; filtering up to 1000 orders runs at lower priority behind it.
+  const deferredQuery = useDeferredValue(query);
   const [toast, setToast] = useState<string | null>(null);
 
   const [optimisticOrders, setOptimisticStatus] = useOptimistic(
@@ -64,14 +66,14 @@ export function OrdersDashboard({ orders, error }: { orders: Order[]; error: str
   }, [optimisticOrders]);
 
   const visible = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = deferredQuery.trim().toLowerCase();
     return optimisticOrders.filter((o) => {
       if (filter !== "all" && o.status !== filter) return false;
       if (!q) return true;
       return [o.customerName, o.phone, o.city, o.address, o.productName, o.ref]
         .some((value) => value.toLowerCase().includes(q));
     });
-  }, [optimisticOrders, filter, query]);
+  }, [optimisticOrders, filter, deferredQuery]);
 
   function changeStatus(order: Order, status: OrderStatus) {
     startUpdate(async () => {
@@ -87,7 +89,7 @@ export function OrdersDashboard({ orders, error }: { orders: Order[]; error: str
         <div className="flex items-center gap-4">
           <Image src="/brand/sigil.png" alt="" width={48} height={48} className="size-11 animate-spin-slow" />
           <div>
-            <p className="label-mono text-blood">Damnit / Control room</p>
+            <p className="label-mono text-blood">Skiro / Control room</p>
             <h1 className="font-display text-4xl uppercase leading-none md:text-5xl">Orders</h1>
           </div>
         </div>

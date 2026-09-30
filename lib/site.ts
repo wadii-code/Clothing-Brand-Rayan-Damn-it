@@ -1,11 +1,11 @@
 export const site = {
-  name: "DAMNIT",
+  name: "SKIRO",
   tagline: "Underground wear for the unforgiven",
   description:
-    "DAMNIT — dark, underground streetwear. Embroidered hoodies and baggy denim. Order online, pay cash on delivery.",
+    "SKIRO — dark, underground streetwear from Morocco. Embroidered hoodies and baggy denim. Order online, pay cash on delivery.",
   drop: "DROP 01",
   season: "SS—26",
-  marqueePrimary: ["DAMN IT", "CASH ON DELIVERY", "DROP 01", "NO CARD NEEDED"],
+  marqueePrimary: ["SKIRO", "CASH ON DELIVERY", "DROP 01", "NO CARD NEEDED"],
   marqueeSecondary: ["WORN LIKE A WARNING", "STITCHED IN RED", "BORN IN THE DARK"],
   checkoutNote:
     "You pay in cash when the package reaches your door. We call you to confirm before shipping.",

@@ -15,7 +15,7 @@ import {
 import { site } from "@/lib/site";
 import { Arrow } from "../ui/arrow";
 
-const WORD = "DAMNIT".split("");
+const WORD = "SKIRO".split("");
 const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 export function Hero() {
@@ -69,11 +69,12 @@ export function Hero() {
       </div>
 
       <div className="absolute inset-0 flex items-center justify-center">
+        {/* Named with aria-label, not an sr-only copy, so crawlers reading the text see the word once. */}
         <motion.h1
           style={{ y: wordY }}
+          aria-label={site.name}
           className="flex select-none font-display text-[27vw] leading-[0.8] tracking-[-0.01em] [text-shadow:0_0_90px_rgba(224,16,29,0.45)] md:text-[24vw] xl:text-[22vw]"
         >
-          <span className="sr-only">DAMNIT</span>
           {WORD.map((letter, i) => (
             <HeroLetter key={i} letter={letter} index={i} progress={progress} />
           ))}

@@ -1,8 +1,11 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { Product } from "@/lib/types";
-import { CheckoutDrawer } from "./checkout-drawer";
+
+// The drawer (form + validation) is kept out of the initial bundle and fetched once the page is idle.
+const CheckoutDrawer = dynamic(() => import("./checkout-drawer").then((m) => m.CheckoutDrawer), { ssr: false });
 
 export type CheckoutRequest = {
   product: Product;
@@ -16,9 +19,21 @@ const CheckoutContext = createContext<{ openCheckout: (request: CheckoutRequest)
 
 export function CheckoutProvider({ children }: { children: React.ReactNode }) {
   const [active, setActive] = useState<ActiveCheckout | null>(null);
+  const [drawerMounted, setDrawerMounted] = useState(false);
+
+  useEffect(() => {
+    const mount = () => setDrawerMounted(true);
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(mount, { timeout: 3000 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = window.setTimeout(mount, 1500);
+    return () => window.clearTimeout(id);
+  }, []);
 
   // New session id → form remounts with a clean state.
   const openCheckout = useCallback((request: CheckoutRequest) => {
+    setDrawerMounted(true);
     setActive({ ...request, session: Date.now() });
   }, []);
   const close = useCallback(() => setActive(null), []);
@@ -27,7 +42,7 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
   return (
     <CheckoutContext.Provider value={value}>
       {children}
-      <CheckoutDrawer checkout={active} onClose={close} />
+      {drawerMounted && <CheckoutDrawer checkout={active} onClose={close} />}
     </CheckoutContext.Provider>
   );
 }

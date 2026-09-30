@@ -82,7 +82,7 @@ export async function placeOrder(_prev: OrderFormState, formData: FormData): Pro
     .single();
 
   if (insertError || !inserted) {
-    console.error("[damnit] order insert failed", insertError);
+    console.error("[skiro] order insert failed", insertError);
     return {
       status: "error",
       message: "Something went wrong on our side. Please try again.",

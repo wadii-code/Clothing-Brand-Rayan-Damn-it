@@ -65,7 +65,7 @@ export async function getOrders(): Promise<{ orders: Order[]; error: string | nu
     .limit(ORDER_LIMIT);
 
   if (error) {
-    console.error("[damnit] failed to load orders", error);
+    console.error("[skiro] failed to load orders", error);
     return { orders: [], error: `Could not load orders: ${error.message}` };
   }
 

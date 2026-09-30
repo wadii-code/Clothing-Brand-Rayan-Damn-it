@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/json-ld";
 import { ProductCard } from "@/components/product/product-card";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductPurchase } from "@/components/product/product-purchase";
 import { Star } from "@/components/ui/star";
 import { formatPrice } from "@/lib/format";
 import { getProductBySlug, getProducts } from "@/lib/products";
+import { breadcrumbJsonLd, pageSeo, productJsonLd, productPath } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 export const revalidate = 60;
@@ -20,10 +22,16 @@ export async function generateMetadata(props: PageProps<"/product/[slug]">): Pro
   const { slug } = await props.params;
   const product = await getProductBySlug(slug);
   if (!product) return { title: "Not found" };
+  const description = product.description ?? `${product.name} — ${formatPrice(product.price)}. Cash on delivery.`;
   return {
     title: product.name,
-    description: product.description ?? `${product.name} — ${formatPrice(product.price)}. Cash on delivery.`,
-    openGraph: { images: [product.mainImage] },
+    description,
+    ...pageSeo({
+      title: `${product.name} — ${site.name}`,
+      description,
+      path: productPath(product),
+      images: [{ url: product.mainImage, alt: product.name }],
+    }),
   };
 }
 
@@ -110,6 +118,17 @@ export default async function ProductPage(props: PageProps<"/product/[slug]">) {
           </div>
         </section>
       )}
+
+      <JsonLd
+        data={[
+          productJsonLd(product),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Shop", path: "/shop" },
+            { name: product.name, path: productPath(product) },
+          ]),
+        ]}
+      />
     </>
   );
 }

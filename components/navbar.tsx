@@ -28,10 +28,14 @@ export function Navbar() {
     if (!menuOpen) return;
     const root = document.documentElement;
     root.style.overflow = "hidden";
+    // The page under the full-screen menu leaves the Tab order and the screen-reader tree.
+    const behind = [document.querySelector("main"), document.querySelector("footer")];
+    behind.forEach((el) => el?.setAttribute("inert", ""));
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
     window.addEventListener("keydown", onKey);
     return () => {
       root.style.overflow = "";
+      behind.forEach((el) => el?.removeAttribute("inert"));
       window.removeEventListener("keydown", onKey);
     };
   }, [menuOpen]);
@@ -48,7 +52,7 @@ export function Navbar() {
             : "border-b border-transparent bg-transparent",
         )}
       >
-        <nav className="mx-auto flex h-16 max-w-[1800px] items-center justify-between px-4 md:h-20 md:px-8">
+        <nav aria-label="Main" className="mx-auto flex h-16 max-w-[1800px] items-center justify-between px-4 md:h-20 md:px-8">
           <Link href="/" className="group flex items-center gap-3" onClick={() => setMenuOpen(false)}>
             <Image
               src="/brand/sigil.png"
@@ -57,7 +61,7 @@ export function Navbar() {
               height={40}
               className="size-9 transition-transform duration-[1.2s] ease-out-expo group-hover:rotate-[135deg] md:size-10"
             />
-            <span className="font-display text-2xl tracking-wide md:text-[1.7rem]">DAMNIT</span>
+            <span className="font-display text-2xl tracking-wide md:text-[1.7rem]">SKIRO</span>
           </Link>
 
           <ul className="hidden items-center gap-10 lg:flex">
