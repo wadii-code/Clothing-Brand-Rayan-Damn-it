@@ -126,7 +126,7 @@ export function Hero() {
             className="hidden items-center gap-3 label-mono text-white/50 md:flex"
           >
             Scroll
-            <span className="relative h-12 w-px overflow-hidden bg-white/15">
+            <span className="relative h-12 w-px overflow-hidden bg-white/14">
               <span className="absolute inset-0 animate-scroll-line bg-blood" />
             </span>
           </motion.div>
