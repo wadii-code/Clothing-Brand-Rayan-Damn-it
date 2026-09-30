@@ -19,8 +19,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
+      # Same npm that writes package-lock.json locally: older releases (npm 10, early npm 11)
+      # resolve the optional wasm packages differently and reject the lockfile.
+      - run: npm install -g npm@11.6.2
       - run: npm ci
       - run: npm run lint
       - run: npm run build
