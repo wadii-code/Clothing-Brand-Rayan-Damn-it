@@ -93,6 +93,11 @@ export function productJsonLd(product: Product) {
       availability: "https://schema.org/InStock",
       itemCondition: "https://schema.org/NewCondition",
       seller: { "@type": "Organization", name: site.name },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: { "@type": "MonetaryAmount", value: 0, currency: "MAD" },
+        shippingDestination: { "@type": "DefinedRegion", addressCountry: "MA" },
+      },
     },
   };
 }

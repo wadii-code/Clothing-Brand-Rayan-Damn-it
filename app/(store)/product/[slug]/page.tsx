@@ -22,7 +22,7 @@ export async function generateMetadata(props: PageProps<"/product/[slug]">): Pro
   const { slug } = await props.params;
   const product = await getProductBySlug(slug);
   if (!product) return { title: "Not found" };
-  const description = product.description ?? `${product.name} — ${formatPrice(product.price)}. Cash on delivery.`;
+  const description = product.description ?? `${product.name} — ${formatPrice(product.price)}. Free delivery, cash on delivery.`;
   return {
     title: product.name,
     description,
@@ -42,7 +42,7 @@ const DETAILS = [
   },
   {
     title: "Delivery",
-    body: "After you order we call you to confirm your size and address, then your piece ships straight to your door.",
+    body: "Free on every order. After you order we call you to confirm your size and address, then your piece ships straight to your door.",
   },
   {
     title: "Fit",
@@ -111,7 +111,7 @@ export default async function ProductPage(props: PageProps<"/product/[slug]">) {
           <h2 className="font-display text-5xl uppercase md:text-7xl">
             Complete <span className="text-outline">the fit</span>
           </h2>
-          <div className="mt-12 grid grid-cols-2 gap-x-3 gap-y-12 md:gap-x-6 lg:grid-cols-4">
+          <div className="mt-12 grid grid-cols-2 items-end gap-x-3 gap-y-12 md:gap-x-6 lg:grid-cols-4">
             {related.map((p, i) => (
               <ProductCard key={p.id} product={p} index={i} sizes="(min-width: 1024px) 25vw, 50vw" />
             ))}

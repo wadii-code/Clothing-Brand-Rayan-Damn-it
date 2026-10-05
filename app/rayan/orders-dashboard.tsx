@@ -319,7 +319,8 @@ function ProductCell({ order }: { order: Order }) {
       <div>
         <p className="font-medium uppercase leading-tight">{order.productName}</p>
         <p className="mt-1 label-mono text-white/45">
-          {order.size ? `Size ${order.size}` : "One size"} · ×{order.quantity}
+          {/* Pack orders already read "Hoodie M · Pants L". */}
+          {order.size ? (order.size.includes(" ") ? order.size : `Size ${order.size}`) : "One size"} · ×{order.quantity}
         </p>
       </div>
     </div>

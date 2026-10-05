@@ -33,6 +33,7 @@ export async function GET() {
     "",
     "- No account and no card: pick a piece and size, then enter full name, phone, city and exact address.",
     `- ${site.checkoutNote}`,
+    "- Delivery is free on every order.",
     "",
   ].join("\n");
 

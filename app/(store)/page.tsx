@@ -7,8 +7,9 @@ import { Lookbook } from "@/components/home/lookbook";
 import { Manifesto } from "@/components/home/manifesto";
 import { Marquee } from "@/components/home/marquee";
 import { JsonLd } from "@/components/json-ld";
-import { LockedCard, ProductCard } from "@/components/product/product-card";
+import { ProductCard } from "@/components/product/product-card";
 import { Arrow } from "@/components/ui/arrow";
+import { isPack } from "@/lib/pack";
 import { getProducts } from "@/lib/products";
 import { organizationJsonLd, pageSeo } from "@/lib/seo";
 import { site } from "@/lib/site";
@@ -21,11 +22,8 @@ export const metadata: Metadata = pageSeo({
   path: "/",
 });
 
-const GRID_SLOTS = 4;
-
 export default async function HomePage() {
   const products = await getProducts();
-  const lockedSlots = Math.max(0, GRID_SLOTS - products.length);
 
   return (
     <>
@@ -44,13 +42,20 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        <div className="mt-12 grid grid-cols-2 gap-x-3 gap-y-12 md:gap-x-6 lg:grid-cols-4">
-          {products.map((product, i) => (
-            <ProductCard key={product.id} product={product} index={i} sizes="(min-width: 1024px) 25vw, 50vw" />
-          ))}
-          {Array.from({ length: lockedSlots }, (_, i) => (
-            <LockedCard key={i} index={products.length + i} />
-          ))}
+        {/* items-end: the gift countdown above the pack card sits in the gap, so every image lines up. */}
+        <div className="mt-12 grid grid-cols-2 items-end gap-x-3 gap-y-12 md:grid-cols-3 md:gap-x-6">
+          {products.map((product, i) => {
+            const pack = isPack(product);
+            return (
+              <ProductCard
+                key={product.id}
+                product={product}
+                index={i}
+                className={pack ? "col-span-2 md:col-span-1" : undefined}
+                sizes={pack ? "(min-width: 768px) 33vw, 100vw" : "(min-width: 768px) 33vw, 50vw"}
+              />
+            );
+          })}
         </div>
       </section>
 

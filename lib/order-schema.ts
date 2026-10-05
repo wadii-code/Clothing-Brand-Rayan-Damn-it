@@ -9,6 +9,8 @@ const stripPhone = (raw: string) => raw.replace(/[\s.\-()]/g, "");
 export const orderSchema = z.object({
   productId: z.uuid("Unknown product"),
   size: z.string().trim().max(10),
+  // Pack orders only: `size` then carries the hoodie size.
+  pantsSize: z.string().trim().max(10).optional(),
   quantity: z.coerce.number().int().min(1, "Min 1").max(10, "Max 10 per order"),
   customerName: z
     .string()
@@ -36,7 +38,7 @@ export type OrderTextValues = Partial<Record<"customerName" | "phone" | "city" |
 export type OrderFormState =
   | { status: "idle" }
   | { status: "error"; message: string; fieldErrors: OrderFieldErrors; values: OrderTextValues }
-  | { status: "success"; orderRef: string; phone: string };
+  | { status: "success"; orderRef: string; phone: string; gift: boolean };
 
 export function firstFieldErrors(error: z.ZodError): OrderFieldErrors {
   const fieldErrors = z.flattenError(error).fieldErrors as Record<string, string[] | undefined>;

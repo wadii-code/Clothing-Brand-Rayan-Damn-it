@@ -4,7 +4,8 @@ import { useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import type { Product } from "@/lib/types";
 import { cn } from "@/lib/format";
-import { LockedCard, ProductCard } from "./product-card";
+import { isPack } from "@/lib/pack";
+import { ProductCard } from "./product-card";
 
 const ALL = "all";
 
@@ -40,22 +41,29 @@ export function ShopGrid({ products }: { products: Product[] }) {
         })}
       </div>
 
-      <motion.div layout className="mt-12 grid grid-cols-2 gap-x-3 gap-y-12 md:grid-cols-3 md:gap-x-6">
+      <motion.div layout className="mt-12 grid grid-cols-2 items-end gap-x-3 gap-y-12 md:grid-cols-3 md:gap-x-6">
         <AnimatePresence mode="popLayout">
-          {visible.map((product, i) => (
-            <motion.div
-              key={product.id}
-              layout
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.4 }}
-            >
-              <ProductCard product={product} index={i} sizes="(min-width: 768px) 33vw, 50vw" />
-            </motion.div>
-          ))}
+          {visible.map((product, i) => {
+            const pack = isPack(product);
+            return (
+              <motion.div
+                key={product.id}
+                layout
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.4 }}
+                className={pack ? "col-span-2 md:col-span-1" : undefined}
+              >
+                <ProductCard
+                  product={product}
+                  index={i}
+                  sizes={pack ? "(min-width: 768px) 33vw, 100vw" : "(min-width: 768px) 33vw, 50vw"}
+                />
+              </motion.div>
+            );
+          })}
         </AnimatePresence>
-        {active === ALL && visible.length < 3 && <LockedCard index={visible.length} />}
       </motion.div>
     </LayoutGroup>
   );

@@ -6,7 +6,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView, wrap, type Variants } from "framer-motion";
 import type { Product } from "@/lib/types";
 import { formatPrice } from "@/lib/format";
+import { isPack } from "@/lib/pack";
 import { useCheckout } from "../checkout/checkout-provider";
+import { PackGiftLine } from "../pack/pack-gift";
 import { Arrow } from "../ui/arrow";
 
 const AUTOPLAY_MS = 6500;
@@ -127,7 +129,9 @@ export function FeaturedSlider({ products }: { products: Product[] }) {
                 <div className="mt-6 flex items-center gap-4">
                   <span className="font-display text-4xl text-blood">{formatPrice(product.price)}</span>
                   <span className="border border-white/15 px-2 py-1 label-mono text-white/60">{product.category}</span>
+                  <span className="border border-white/15 px-2 py-1 label-mono text-white/60">Free delivery</span>
                 </div>
+                {isPack(product) && <PackGiftLine className="mt-5" />}
                 {product.description && (
                   <p className="mt-6 max-w-md text-sm leading-relaxed text-white/60">{product.description}</p>
                 )}

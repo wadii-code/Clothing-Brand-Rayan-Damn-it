@@ -14,7 +14,7 @@ const STEPS = [
   },
   {
     title: "Pay at your door",
-    body: "We call to confirm, then ship. You pay cash when it lands in your hands.",
+    body: "We call to confirm, then ship for free. You pay cash when it lands in your hands.",
   },
 ];
 

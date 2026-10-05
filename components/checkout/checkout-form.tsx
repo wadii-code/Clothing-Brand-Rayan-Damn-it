@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { placeOrder } from "@/app/(store)/actions";
 import {
@@ -12,11 +12,13 @@ import {
   type OrderFormState,
 } from "@/lib/order-schema";
 import { cn, formatPrice } from "@/lib/format";
+import { PACK_GIFT, isPack } from "@/lib/pack";
 import { moroccanCities, site } from "@/lib/site";
 import type { CheckoutRequest } from "./checkout-provider";
+import { PackGiftLine, usePackGift } from "../pack/pack-gift";
 import { Star } from "../ui/star";
 
-const FIELD_ORDER: OrderField[] = ["size", "quantity", "customerName", "phone", "city", "address"];
+const FIELD_ORDER: OrderField[] = ["size", "pantsSize", "quantity", "customerName", "phone", "city", "address"];
 const INITIAL_STATE: OrderFormState = { status: "idle" };
 
 type Props = { checkout: CheckoutRequest; onClose: () => void };
@@ -24,9 +26,13 @@ type Props = { checkout: CheckoutRequest; onClose: () => void };
 export function CheckoutForm({ checkout, onClose }: Props) {
   const { product } = checkout;
   const hasSizes = product.sizes.length > 0;
+  const pack = isPack(product);
+  const onlySize = product.sizes.length === 1 ? product.sizes[0] : "";
+  const { refresh: refreshGifts } = usePackGift();
 
   const [state, formAction, pending] = useActionState(placeOrder, INITIAL_STATE);
-  const [size, setSize] = useState(checkout.size ?? (product.sizes.length === 1 ? product.sizes[0] : ""));
+  const [size, setSize] = useState(checkout.size ?? onlySize);
+  const [pantsSize, setPantsSize] = useState(checkout.pantsSize ?? onlySize);
   const [quantity, setQuantity] = useState(checkout.quantity ?? 1);
   const [clientErrors, setClientErrors] = useState<OrderFieldErrors>({});
   const [edited, setEdited] = useState<ReadonlySet<OrderField>>(new Set());
@@ -34,6 +40,12 @@ export function CheckoutForm({ checkout, onClose }: Props) {
   const serverErrors = state.status === "error" ? state.fieldErrors : {};
   const values = state.status === "error" ? state.values : {};
   const total = product.price * quantity;
+
+  // A pack sale moves the countdown: pull the new number for every notice on the page.
+  const orderPlaced = state.status === "success";
+  useEffect(() => {
+    if (pack && orderPlaced) void refreshGifts();
+  }, [pack, orderPlaced, refreshGifts]);
 
   const errorFor = (field: OrderField) =>
     clientErrors[field] ?? (edited.has(field) ? undefined : serverErrors[field]);
@@ -54,6 +66,7 @@ export function CheckoutForm({ checkout, onClose }: Props) {
     const result = orderSchema.safeParse(Object.fromEntries(new FormData(form)));
     const errors: OrderFieldErrors = result.success ? {} : firstFieldErrors(result.error);
     if (hasSizes && !size) errors.size = "Pick a size";
+    if (hasSizes && pack && !pantsSize) errors.pantsSize = "Pick a size";
 
     if (Object.keys(errors).length > 0) {
       e.preventDefault(); // blocks the server action
@@ -67,7 +80,9 @@ export function CheckoutForm({ checkout, onClose }: Props) {
   }
 
   if (state.status === "success") {
-    return <OrderConfirmed orderRef={state.orderRef} phone={state.phone} total={total} onClose={onClose} />;
+    return (
+      <OrderConfirmed orderRef={state.orderRef} phone={state.phone} total={total} gift={state.gift} onClose={onClose} />
+    );
   }
 
   return (
@@ -90,40 +105,45 @@ export function CheckoutForm({ checkout, onClose }: Props) {
           <div className="flex min-w-0 flex-1 flex-col justify-between py-1">
             <div>
               <p className="truncate font-display text-xl uppercase leading-tight">{product.name}</p>
-              <p className="label-mono text-white/40">{product.category}</p>
+              <p className="label-mono text-white/40">
+                {product.category}
+                {pack && " — Hoodie + Pants"}
+              </p>
             </div>
             <p className="font-mono text-sm text-white/80">{formatPrice(product.price)}</p>
           </div>
         </div>
+        {pack && <PackGiftLine className="mt-4" />}
 
         <input type="hidden" name="productId" value={product.id} />
 
         {hasSizes ? (
-          <fieldset className="mt-8">
-            <legend className="label-mono text-white/50">Size</legend>
-            <div className="mt-3 flex flex-wrap gap-2" role="radiogroup" aria-describedby={errorFor("size") ? "size-error" : undefined}>
-              {product.sizes.map((s, i) => (
-                <label key={s} className="relative">
-                  <input
-                    type="radio"
-                    name="size"
-                    value={s}
-                    checked={size === s}
-                    onChange={() => {
-                      setSize(s);
-                      markEdited("size");
-                    }}
-                    data-field={i === 0 ? "size" : undefined}
-                    className="peer sr-only"
-                  />
-                  <span className="flex h-11 min-w-12 items-center justify-center border border-white/20 px-3 font-mono text-sm transition-colors duration-200 hover:border-white peer-checked:border-blood peer-checked:bg-blood peer-checked:text-white peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-blood">
-                    {s}
-                  </span>
-                </label>
-              ))}
-            </div>
-            <FieldError id="size-error" message={errorFor("size")} />
-          </fieldset>
+          <>
+            <SizeField
+              name="size"
+              legend={pack ? "Hoodie size" : "Size"}
+              sizes={product.sizes}
+              value={size}
+              error={errorFor("size")}
+              onChange={(s) => {
+                setSize(s);
+                markEdited("size");
+              }}
+            />
+            {pack && (
+              <SizeField
+                name="pantsSize"
+                legend="Pants size"
+                sizes={product.sizes}
+                value={pantsSize}
+                error={errorFor("pantsSize")}
+                onChange={(s) => {
+                  setPantsSize(s);
+                  markEdited("pantsSize");
+                }}
+              />
+            )}
+          </>
         ) : (
           <input type="hidden" name="size" value="" />
         )}
@@ -235,6 +255,10 @@ export function CheckoutForm({ checkout, onClose }: Props) {
             </motion.p>
           )}
         </AnimatePresence>
+        <div className="mb-2 flex items-baseline justify-between label-mono text-white/50">
+          <span>Delivery</span>
+          <span className="text-white">Free</span>
+        </div>
         <div className="mb-4 flex items-baseline justify-between">
           <span className="label-mono text-white/50">Total — pay on delivery</span>
           <span className="font-display text-3xl">{formatPrice(total)}</span>
@@ -257,6 +281,48 @@ export function CheckoutForm({ checkout, onClose }: Props) {
         </button>
       </div>
     </form>
+  );
+}
+
+function SizeField({
+  name,
+  legend,
+  sizes,
+  value,
+  error,
+  onChange,
+}: {
+  name: "size" | "pantsSize";
+  legend: string;
+  sizes: string[];
+  value: string;
+  error?: string;
+  onChange: (size: string) => void;
+}) {
+  const errorId = `${name}-error`;
+  return (
+    <fieldset className="mt-8">
+      <legend className="label-mono text-white/50">{legend}</legend>
+      <div className="mt-3 flex flex-wrap gap-2" role="radiogroup" aria-describedby={error ? errorId : undefined}>
+        {sizes.map((s, i) => (
+          <label key={s} className="relative">
+            <input
+              type="radio"
+              name={name}
+              value={s}
+              checked={value === s}
+              onChange={() => onChange(s)}
+              data-field={i === 0 ? name : undefined}
+              className="peer sr-only"
+            />
+            <span className="flex h-11 min-w-12 items-center justify-center border border-white/20 px-3 font-mono text-sm transition-colors duration-200 hover:border-white peer-checked:border-blood peer-checked:bg-blood peer-checked:text-white peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-blood">
+              {s}
+            </span>
+          </label>
+        ))}
+      </div>
+      <FieldError id={errorId} message={error} />
+    </fieldset>
   );
 }
 
@@ -340,11 +406,13 @@ function OrderConfirmed({
   orderRef,
   phone,
   total,
+  gift,
   onClose,
 }: {
   orderRef: string;
   phone: string;
   total: number;
+  gift: boolean;
   onClose: () => void;
 }) {
   return (
@@ -379,6 +447,11 @@ function OrderConfirmed({
             )}{" "}
             Have <span className="text-white">{formatPrice(total)}</span> in cash ready when it arrives.
           </p>
+          {gift && (
+            <p className="mx-auto mt-6 max-w-xs border border-blood/50 bg-blood/10 px-4 py-3 label-mono text-white">
+              You made the first {PACK_GIFT.total} — your free gift ({PACK_GIFT.value} DH) ships in the box
+            </p>
+          )}
           <button
             type="button"
             onClick={onClose}

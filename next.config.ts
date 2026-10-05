@@ -24,14 +24,11 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Explicit: never ship source maps to browsers in production, they would expose the full source.
   productionBrowserSourceMaps: false,
+  // No `experimental` block: Next prints every non-default experiment on startup. Its disk cache is on
+  // (the default, faster restarts; delete .next to reclaim the space), and framer-motion needs no
+  // optimizePackageImports since it is marked side-effect free and tree-shakes on its own.
   // An unrelated package-lock.json in the home folder confuses root detection.
   turbopack: { root: __dirname },
-  experimental: {
-    // Off because the disk filled up; re-enable once C: has free space.
-    turbopackFileSystemCacheForDev: false,
-    turbopackFileSystemCacheForBuild: false,
-    optimizePackageImports: ["framer-motion"],
-  },
   images: {
     // AVIF where the browser supports it (~20% smaller than WebP), WebP otherwise.
     formats: ["image/avif", "image/webp"],
@@ -39,6 +36,14 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/**" },
     ],
+  },
+  // Products were renamed: old links (shared, bookmarked, indexed by Google) land on the new pages.
+  async redirects() {
+    return [
+      { source: "/product/solar-sigil-hoodie", destination: "/product/red-hoodie", permanent: true },
+      { source: "/product/northstar-baggy-jeans", destination: "/product/red-pants", permanent: true },
+      { source: "/product/full-fit-pack", destination: "/product/red-pack", permanent: true },
+    ];
   },
   async headers() {
     return [

@@ -4,65 +4,60 @@ import { useState } from "react";
 import { motion, useAnimate } from "framer-motion";
 import type { Product } from "@/lib/types";
 import { cn, formatPrice } from "@/lib/format";
+import { isPack } from "@/lib/pack";
 import { useCheckout } from "../checkout/checkout-provider";
+import { PackGiftNotice } from "../pack/pack-gift";
 
 export function ProductPurchase({ product }: { product: Product }) {
   const { openCheckout } = useCheckout();
-  const [size, setSize] = useState(product.sizes.length === 1 ? product.sizes[0] : "");
+  const pack = isPack(product);
+  const hasSizes = product.sizes.length > 0;
+  const onlySize = product.sizes.length === 1 ? product.sizes[0] : "";
+  const [size, setSize] = useState(onlySize);
+  const [pantsSize, setPantsSize] = useState(onlySize);
   const [quantity, setQuantity] = useState(1);
   const [needsSize, setNeedsSize] = useState(false);
   const [scope, animate] = useAnimate();
 
   function order() {
-    if (product.sizes.length > 0 && !size) {
+    if (hasSizes && (!size || (pack && !pantsSize))) {
       setNeedsSize(true);
       animate(scope.current, { x: [0, -10, 10, -6, 6, 0] }, { duration: 0.45 });
       return;
     }
-    openCheckout({ product, size, quantity });
+    openCheckout({ product, size, pantsSize: pack ? pantsSize : undefined, quantity });
   }
 
   return (
     <div className="mt-10">
-      {product.sizes.length > 0 && (
-        <div ref={scope}>
-          <div className="flex items-center justify-between">
-            <p className={cn("label-mono transition-colors", needsSize ? "text-blood" : "text-white/50")}>
-              {needsSize ? "Select a size first" : "Size"}
-            </p>
-            {size && <p className="label-mono text-white/70">Selected: {size}</p>}
-          </div>
-          <div className="mt-3 grid grid-cols-5 gap-2" role="radiogroup" aria-label="Size">
-            {product.sizes.map((s) => (
-              <button
-                key={s}
-                type="button"
-                role="radio"
-                aria-checked={size === s}
-                onClick={() => {
-                  setSize(s);
-                  setNeedsSize(false);
-                }}
-                className={cn(
-                  "relative h-12 border font-mono text-sm transition-colors duration-200",
-                  size === s
-                    ? "border-blood text-white"
-                    : needsSize
-                      ? "border-blood/60 text-white/80 hover:border-blood"
-                      : "border-white/20 text-white/80 hover:border-white",
-                )}
-              >
-                {size === s && (
-                  <motion.span
-                    layoutId={`size-${product.id}`}
-                    className="absolute inset-0 bg-blood"
-                    transition={{ type: "spring", stiffness: 500, damping: 35 }}
-                  />
-                )}
-                <span className="relative">{s}</span>
-              </button>
-            ))}
-          </div>
+      {pack && <PackGiftNotice className="mb-8" />}
+
+      {hasSizes && (
+        <div ref={scope} className="space-y-6">
+          <SizePicker
+            id={`${product.id}-size`}
+            label={pack ? "Hoodie size" : "Size"}
+            sizes={product.sizes}
+            value={size}
+            invalid={needsSize && !size}
+            onChange={(s) => {
+              setSize(s);
+              if (!pack || pantsSize) setNeedsSize(false);
+            }}
+          />
+          {pack && (
+            <SizePicker
+              id={`${product.id}-pants-size`}
+              label="Pants size"
+              sizes={product.sizes}
+              value={pantsSize}
+              invalid={needsSize && !pantsSize}
+              onChange={(s) => {
+                setPantsSize(s);
+                if (size) setNeedsSize(false);
+              }}
+            />
+          )}
         </div>
       )}
 
@@ -103,8 +98,63 @@ export function ProductPurchase({ product }: { product: Product }) {
       </div>
       <p className="mt-3 flex items-center gap-2 label-mono text-white/40">
         <span className="size-1.5 animate-blink rounded-full bg-blood" />
-        Pay cash on delivery — no card needed
+        Free delivery — pay cash at your door, no card needed
       </p>
+    </div>
+  );
+}
+
+function SizePicker({
+  id,
+  label,
+  sizes,
+  value,
+  invalid,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  sizes: string[];
+  value: string;
+  invalid: boolean;
+  onChange: (size: string) => void;
+}) {
+  return (
+    <div>
+      <div className="flex items-center justify-between">
+        <p className={cn("label-mono transition-colors", invalid ? "text-blood" : "text-white/50")}>
+          {invalid ? `Select a ${label.toLowerCase()} first` : label}
+        </p>
+        {value && <p className="label-mono text-white/70">Selected: {value}</p>}
+      </div>
+      <div className="mt-3 grid grid-cols-5 gap-2" role="radiogroup" aria-label={label}>
+        {sizes.map((s) => (
+          <button
+            key={s}
+            type="button"
+            role="radio"
+            aria-checked={value === s}
+            onClick={() => onChange(s)}
+            className={cn(
+              "relative h-12 border font-mono text-sm transition-colors duration-200",
+              value === s
+                ? "border-blood text-white"
+                : invalid
+                  ? "border-blood/60 text-white/80 hover:border-blood"
+                  : "border-white/20 text-white/80 hover:border-white",
+            )}
+          >
+            {value === s && (
+              <motion.span
+                layoutId={id}
+                className="absolute inset-0 bg-blood"
+                transition={{ type: "spring", stiffness: 500, damping: 35 }}
+              />
+            )}
+            <span className="relative">{s}</span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

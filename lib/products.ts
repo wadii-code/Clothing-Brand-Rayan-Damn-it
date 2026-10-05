@@ -3,6 +3,7 @@ import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { getSupabaseAdmin } from "./supabase/server";
 import { DEMO_PRODUCTS } from "./demo-products";
+import { PACK_CATEGORY } from "./pack";
 import type { Product } from "./types";
 
 const PRODUCT_COLUMNS = "id, slug, name, description, price, main_image, hover_image, category, sizes";
@@ -33,6 +34,15 @@ function toProduct(row: ProductRow): Product {
   };
 }
 
+// Every listing (grid, slider, shop) reads pack → hoodie → pants whatever the insert dates;
+// other categories follow, oldest first (sort() is stable).
+const CATEGORY_ORDER = [PACK_CATEGORY, "hoodies", "pants"];
+const categoryRank = (product: Product) => {
+  const rank = CATEGORY_ORDER.indexOf(product.category);
+  return rank === -1 ? CATEGORY_ORDER.length : rank;
+};
+const sortForDrop = (products: Product[]) => products.sort((a, b) => categoryRank(a) - categoryRank(b));
+
 let warned = false;
 function warnDemoMode() {
   if (warned) return;
@@ -58,7 +68,7 @@ const fetchProducts = unstable_cache(
       .order("created_at", { ascending: true });
 
     if (error) throw new Error(`Failed to load products: ${error.message}`);
-    return (data as ProductRow[]).map(toProduct);
+    return sortForDrop((data as ProductRow[]).map(toProduct));
   },
   [PRODUCTS_TAG],
   { revalidate: 60, tags: [PRODUCTS_TAG] },

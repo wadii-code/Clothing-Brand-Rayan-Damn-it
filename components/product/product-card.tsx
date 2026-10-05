@@ -5,7 +5,9 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Product } from "@/lib/types";
 import { cn, formatPrice } from "@/lib/format";
+import { isPack } from "@/lib/pack";
 import { useCheckout } from "../checkout/checkout-provider";
+import { PackGiftNotice } from "../pack/pack-gift";
 import { Arrow } from "../ui/arrow";
 
 type Props = {
@@ -13,11 +15,19 @@ type Props = {
   index?: number;
   badge?: string;
   sizes?: string;
+  className?: string;
 };
 
-export function ProductCard({ product, index = 0, badge = "New", sizes = "(min-width: 1024px) 33vw, 50vw" }: Props) {
+export function ProductCard({
+  product,
+  index = 0,
+  badge = "New",
+  sizes = "(min-width: 1024px) 33vw, 50vw",
+  className,
+}: Props) {
   const { openCheckout } = useCheckout();
   const href = `/product/${product.slug}`;
+  const pack = isPack(product);
 
   return (
     <motion.article
@@ -25,8 +35,9 @@ export function ProductCard({ product, index = 0, badge = "New", sizes = "(min-w
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.9, delay: (index % 4) * 0.1, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative"
+      className={cn("group relative", className)}
     >
+      {pack && <PackGiftNotice className="mb-3" />}
       <div className="relative aspect-[3/4] overflow-hidden bg-smoke">
         <Link href={href} aria-label={product.name} className="absolute inset-0 block">
           <Image
@@ -74,49 +85,18 @@ export function ProductCard({ product, index = 0, badge = "New", sizes = "(min-w
             <span className="truncate">{product.name}</span>
             <Arrow className="size-4 shrink-0 -translate-x-2 text-blood opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100" />
           </h3>
-          <p className="mt-1 label-mono text-white/40">
+          {/* One line, so every card's text block is the same height and the images in a row line up. */}
+          <p className="mt-1 truncate label-mono text-white/40">
             {product.category}
-            {product.sizes.length > 0 && <span className="hidden sm:inline"> — {product.sizes.join(" · ")}</span>}
+            {pack ? (
+              <span> — Hoodie + Pants</span>
+            ) : (
+              product.sizes.length > 0 && <span className="hidden sm:inline"> — {product.sizes.join(" · ")}</span>
+            )}
           </p>
         </div>
         <p className="shrink-0 font-mono text-sm text-white/85">{formatPrice(product.price)}</p>
       </Link>
     </motion.article>
-  );
-}
-
-export function LockedCard({ index = 0, label = "Drop 02" }: { index?: number; label?: string }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 60 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.9, delay: (index % 4) * 0.1, ease: [0.16, 1, 0.3, 1] }}
-      className="group"
-      role="group"
-      aria-label={`${label} — coming soon`}
-    >
-      <div className="relative flex aspect-[3/4] items-center justify-center overflow-hidden border border-white/10 bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.025)_0_2px,transparent_2px_14px)]">
-        <Image
-          src="/brand/sigil.png"
-          alt=""
-          width={600}
-          height={600}
-          sizes="(min-width: 1024px) 25vw, 50vw"
-          className="w-3/4 animate-spin-slow opacity-15 blur-[1px] transition-all duration-700 group-hover:opacity-35 group-hover:blur-none"
-        />
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center">
-          <span className="font-display text-5xl text-white/80 md:text-6xl">???</span>
-          <span className="border border-blood px-2 py-1 label-mono text-blood">Locked</span>
-        </div>
-      </div>
-      <div className="mt-4 flex items-start justify-between">
-        <div>
-          <p className="font-display text-xl uppercase tracking-wide text-white/40 md:text-2xl">Classified</p>
-          <p className="mt-1 label-mono text-white/30">{label} — soon</p>
-        </div>
-        <p className="font-mono text-sm text-white/30">— DH</p>
-      </div>
-    </motion.div>
   );
 }

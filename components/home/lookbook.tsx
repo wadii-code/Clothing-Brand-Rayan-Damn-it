@@ -29,7 +29,7 @@ export function Lookbook() {
   const barScale = useTransform(progress, [0, 1], [0, 1]);
 
   return (
-    <section id="lookbook" ref={sectionRef} className="relative h-[420vh] scroll-mt-20 bg-ink">
+    <section id="lookbook" ref={sectionRef} className="relative h-[540vh] scroll-mt-20 bg-ink">
       <div className="sticky top-0 flex h-svh flex-col justify-center overflow-hidden">
         <motion.div ref={trackRef} style={{ x }} className="flex h-full w-max items-center gap-6 pl-4 pr-[10vw] will-change-transform md:gap-10 md:pl-8">
           <div className="flex w-[85vw] shrink-0 flex-col justify-center md:w-[46vw]">

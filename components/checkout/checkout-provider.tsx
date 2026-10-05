@@ -10,6 +10,8 @@ const CheckoutDrawer = dynamic(() => import("./checkout-drawer").then((m) => m.C
 export type CheckoutRequest = {
   product: Product;
   size?: string;
+  // Pack only: `size` is then the hoodie size.
+  pantsSize?: string;
   quantity?: number;
 };
 
