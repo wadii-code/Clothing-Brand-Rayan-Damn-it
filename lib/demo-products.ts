@@ -7,8 +7,8 @@ export const DEMO_PRODUCTS: Product[] = [
     slug: "red-pack",
     name: "Red Pack",
     description:
-      "The full fit in one box: the Red Hoodie and the Red Pants. Pick a size for each piece. 61 DH less than buying them apart.",
-    price: 499,
+      "The full fit in one box: the Red Hoodie and the Red Pants. Pick a size for each piece. 68 DH less than buying them apart.",
+    price: 450,
     mainImage: "/products/pic4.png",
     hoverImage: "/products/pic3.png",
     category: "pack",
@@ -20,7 +20,7 @@ export const DEMO_PRODUCTS: Product[] = [
     name: "Red Hoodie",
     description:
       "Heavyweight black fleece hoodie. Blood-red Solar Sigil embroidered across the back, northstar chain running down both sleeves. Oversized, dropped shoulders.",
-    price: 280,
+    price: 259,
     mainImage: "/products/pic6.png",
     hoverImage: "/products/pic11.png",
     category: "hoodies",
@@ -32,7 +32,7 @@ export const DEMO_PRODUCTS: Product[] = [
     name: "Red Pants",
     description:
       "Washed black baggy denim with a chain of red northstars embroidered down every leg. Wide, stacked fit that breaks over the sneaker.",
-    price: 280,
+    price: 259,
     mainImage: "/products/pic5.png",
     hoverImage: "/products/pic1.png",
     category: "pants",
