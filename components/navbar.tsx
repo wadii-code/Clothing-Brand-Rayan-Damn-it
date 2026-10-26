@@ -53,7 +53,7 @@ export function Navbar() {
             : "border-b border-transparent bg-transparent",
         )}
       >
-        <nav aria-label="Main" className="mx-auto flex h-16 max-w-[1800px] items-center justify-between px-4 md:h-20 md:px-8">
+        <nav aria-label="Main" className="mx-auto flex h-16 max-w-[1799px] items-center justify-between px-4 md:h-20 md:px-8">
           <Link href="/" className="group flex items-center" onClick={() => setMenuOpen(false)}>
             <Image
               src="/brand/skr-logo.png"

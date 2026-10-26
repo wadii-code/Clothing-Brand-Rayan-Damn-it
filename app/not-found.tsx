@@ -13,7 +13,7 @@ export default function NotFound() {
         alt=""
         width={900}
         height={900}
-        className="pointer-events-none absolute w-[min(120vw,900px)] animate-spin-slow opacity-10"
+        className="pointer-events-none absolute w-[min(120vw,901px)] animate-spin-slow opacity-10"
       />
       <p className="relative label-mono text-blood">Error 404</p>
       <h1 className="relative mt-4 font-display text-[26vw] leading-[0.8] md:text-[16vw]">
