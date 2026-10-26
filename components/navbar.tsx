@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { cn } from "@/lib/format";
+import { site } from "@/lib/site";
 
 const LINKS = [
   { href: "/shop", label: "Shop" },
@@ -53,15 +54,16 @@ export function Navbar() {
         )}
       >
         <nav aria-label="Main" className="mx-auto flex h-16 max-w-[1800px] items-center justify-between px-4 md:h-20 md:px-8">
-          <Link href="/" className="group flex items-center gap-3" onClick={() => setMenuOpen(false)}>
+          <Link href="/" className="group flex items-center" onClick={() => setMenuOpen(false)}>
             <Image
-              src="/brand/sigil.png"
-              alt=""
-              width={40}
-              height={40}
-              className="size-9 transition-transform duration-[1.2s] ease-out-expo group-hover:rotate-[135deg] md:size-10"
+              src="/brand/skr-logo.png"
+              alt={site.name}
+              width={103}
+              height={56}
+              quality={90}
+              loading="eager"
+              className="h-11 w-auto transition-transform duration-500 ease-out-expo group-hover:scale-105 md:h-14"
             />
-            <span className="font-display text-2xl tracking-wide md:text-[1.7rem]">SKIRO</span>
           </Link>
 
           <ul className="hidden items-center gap-10 lg:flex">

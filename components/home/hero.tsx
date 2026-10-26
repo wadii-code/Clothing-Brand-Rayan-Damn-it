@@ -16,7 +16,6 @@ import { site } from "@/lib/site";
 import { Arrow } from "../ui/arrow";
 
 const WORD = "SKIRO".split("");
-const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -48,12 +47,14 @@ export function Hero() {
       <div className="absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-linear-to-t from-ink to-transparent" />
 
       <div className="pointer-events-none absolute inset-0 -z-10 grid place-items-center">
-        <motion.div style={{ scale: sigilScale, rotate: sigilRotate, opacity: sigilOpacity }} className="w-[min(118vw,88vh)] md:w-[min(80vw,92vh)]">
-          <motion.div
-            initial={{ scale: 0.55, rotate: -60, opacity: 0, filter: "blur(18px)" }}
-            animate={{ scale: 1, rotate: 0, opacity: 1, filter: "blur(0px)" }}
-            transition={{ duration: 2.4, ease: EASE_OUT }}
-          >
+        {/* will-change: framer rewrites this transform on every scroll frame; on its own layer that costs no repaint. */}
+        <motion.div
+          style={{ scale: sigilScale, rotate: sigilRotate, opacity: sigilOpacity }}
+          className="relative w-[min(118vw,88vh)] will-change-transform md:w-[min(80vw,92vh)]"
+        >
+          {/* A static glow instead of a drop-shadow filter: a 60px blur on a spinning image is recomputed every frame. */}
+          <div aria-hidden className="absolute -inset-[12%] rounded-full bg-[radial-gradient(circle,rgba(224,16,29,0.3),transparent_62%)]" />
+          <div className="relative animate-sigil-in">
             <Image
               src="/brand/sigil.png"
               alt=""
@@ -62,9 +63,9 @@ export function Hero() {
               loading="eager"
               fetchPriority="high"
               sizes="(min-width: 768px) 80vw, 118vw"
-              className="h-auto w-full animate-spin-slow drop-shadow-[0_0_60px_rgba(224,16,29,0.35)]"
+              className="h-auto w-full animate-spin-slow"
             />
-          </motion.div>
+          </div>
         </motion.div>
       </div>
 
@@ -82,33 +83,25 @@ export function Hero() {
       </div>
 
       <motion.div style={{ opacity: chromeOpacity }} className="pointer-events-none absolute inset-0 mx-auto max-w-[1800px] px-4 md:px-8">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 1 }}
-          className="absolute inset-x-4 top-24 flex justify-between label-mono text-white/55 md:inset-x-8 md:top-28"
+        <div
+          style={{ animationDelay: "0.6s" }}
+          className="absolute inset-x-4 top-24 flex animate-fade-in justify-between label-mono text-white/55 md:inset-x-8 md:top-28"
         >
           <span>({site.drop})</span>
           <span className="hidden sm:block">Underground wear — Maroc</span>
           <span>{site.season}</span>
-        </motion.div>
+        </div>
 
         <div className="absolute inset-x-4 bottom-8 flex flex-col items-start gap-6 md:inset-x-8 md:bottom-10 md:flex-row md:items-end md:justify-between">
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 1, ease: EASE_OUT }}
-            className="max-w-xs text-sm uppercase leading-relaxed text-white/70"
+          {/* The largest text above the fold, so it is what the browser times as "largest paint": it must not wait on JS. */}
+          <p
+            style={{ animationDelay: "0.45s" }}
+            className="max-w-xs animate-rise text-sm uppercase leading-relaxed text-white/70"
           >
             {site.tagline}. Order online — <span className="text-white">pay cash at your door.</span>
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.25, duration: 1, ease: EASE_OUT }}
-            className="pointer-events-auto"
-          >
+          <div style={{ animationDelay: "0.55s" }} className="pointer-events-auto animate-rise">
             <Link
               href="/shop"
               className="group relative inline-flex items-center gap-4 overflow-hidden bg-blood px-7 py-4 font-display text-lg uppercase tracking-wider text-white"
@@ -117,19 +110,17 @@ export function Hero() {
               <span className="relative transition-colors duration-500 group-hover:text-black">Shop the drop</span>
               <Arrow className="relative size-5 transition-all duration-500 group-hover:translate-x-1 group-hover:text-black" />
             </Link>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.6, duration: 1 }}
-            className="hidden items-center gap-3 label-mono text-white/50 md:flex"
+          <div
+            style={{ animationDelay: "0.9s" }}
+            className="hidden animate-fade-in items-center gap-3 label-mono text-white/50 md:flex"
           >
             Scroll
             <span className="relative h-12 w-px overflow-hidden bg-white/14">
               <span className="absolute inset-0 animate-scroll-line bg-blood" />
             </span>
-          </motion.div>
+          </div>
         </div>
       </motion.div>
     </section>
@@ -143,13 +134,13 @@ function HeroLetter({ letter, index, progress }: { letter: string; index: number
   const rotate = useTransform(progress, [0, 1], [0, fromCenter * 4]);
 
   return (
-    <motion.span aria-hidden style={{ x, y, rotate }} className="inline-block overflow-hidden px-[0.01em] pb-[0.02em]">
-      <motion.span
-        className="inline-block"
-        initial={{ y: "110%", rotate: 6 }}
-        animate={{ y: "0%", rotate: 0 }}
-        transition={{ delay: 0.35 + index * 0.08, duration: 1.3, ease: EASE_OUT }}
-      >
+    <motion.span
+      aria-hidden
+      style={{ x, y, rotate }}
+      className="inline-block overflow-hidden px-[0.01em] pb-[0.02em] will-change-transform"
+    >
+      {/* CSS reveal: the headline starts rising at first paint, not after the JS bundle has hydrated. */}
+      <span style={{ animationDelay: `${0.15 + index * 0.07}s` }} className="inline-block animate-letter-in">
         <motion.span
           className="inline-block"
           whileHover={{ color: "#e0101d", skewX: -8, y: "-4%" }}
@@ -157,7 +148,7 @@ function HeroLetter({ letter, index, progress }: { letter: string; index: number
         >
           {letter}
         </motion.span>
-      </motion.span>
+      </span>
     </motion.span>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import {
   motion,
   useAnimationFrame,
@@ -38,9 +38,22 @@ function VelocityMarquee({
   // Wrapping over exactly one copy's width keeps the loop seamless.
   const x = useTransform(baseX, (v) => `${wrap(-100 / COPIES, 0, v)}%`);
   const direction = useRef(1);
+  const container = useRef<HTMLDivElement>(null);
+  const visible = useRef(true);
+
+  // The strips sit far down the page for most of a visit: don't tick (and restyle) them while off screen.
+  useEffect(() => {
+    const el = container.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => (visible.current = entry.isIntersecting), {
+      rootMargin: "150px 0px",
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useAnimationFrame((_, delta) => {
-    if (reduceMotion) return;
+    if (reduceMotion || !visible.current) return;
     const factor = velocityFactor.get();
     if (factor < 0) direction.current = -1;
     else if (factor > 0) direction.current = 1;
@@ -51,8 +64,9 @@ function VelocityMarquee({
   });
 
   return (
-    <div className="flex overflow-hidden whitespace-nowrap">
-      <motion.div className="flex shrink-0 whitespace-nowrap" style={{ x }}>
+    <div ref={container} className="flex overflow-hidden whitespace-nowrap">
+      {/* will-change: the track gets its own layer, so moving it never repaints the outlined text or the glow behind it. */}
+      <motion.div className="flex shrink-0 whitespace-nowrap will-change-transform" style={{ x }}>
         {Array.from({ length: COPIES }, (_, copy) => (
           <div key={copy} aria-hidden={copy > 0} className={cn("flex shrink-0 items-center", className)}>
             {items.map((item) => (
