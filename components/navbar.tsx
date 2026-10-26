@@ -61,7 +61,7 @@ export function Navbar() {
               width={103}
               height={56}
               quality={90}
-              loading="eager"
+              preload
               className="h-11 w-auto transition-transform duration-500 ease-out-expo group-hover:scale-105 md:h-14"
             />
           </Link>
