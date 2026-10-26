@@ -6,6 +6,7 @@ import { Hero } from "@/components/home/hero";
 import { Lookbook } from "@/components/home/lookbook";
 import { Manifesto } from "@/components/home/manifesto";
 import { Marquee } from "@/components/home/marquee";
+import { ParallaxMarquee } from "@/components/home/parallax-marquee";
 import { JsonLd } from "@/components/json-ld";
 import { ProductCard } from "@/components/product/product-card";
 import { Arrow } from "@/components/ui/arrow";
@@ -61,6 +62,7 @@ export default async function HomePage() {
 
       <FeaturedSlider products={products} />
       <Manifesto />
+      <ParallaxMarquee />
       <Lookbook />
       <CodSteps />
       <JsonLd data={organizationJsonLd()} />

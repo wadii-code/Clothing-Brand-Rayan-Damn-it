@@ -9,8 +9,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description:
       "The full fit in one box: the Red Hoodie and the Red Pants. Pick a size for each piece. 61 DH less than buying them apart.",
     price: 499,
-    mainImage: "/products/full-fit-pack-front.jpg",
-    hoverImage: "/products/full-fit-pack-back.jpg",
+    mainImage: "/products/pic4.png",
+    hoverImage: "/products/pic3.png",
     category: "pack",
     sizes: ["S", "M", "L", "XL", "XXL"],
   },
@@ -21,8 +21,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description:
       "Heavyweight black fleece hoodie. Blood-red Solar Sigil embroidered across the back, northstar chain running down both sleeves. Oversized, dropped shoulders.",
     price: 280,
-    mainImage: "/products/solar-sigil-hoodie-front.jpg",
-    hoverImage: "/products/solar-sigil-hoodie-back.jpg",
+    mainImage: "/products/pic6.png",
+    hoverImage: "/products/pic11.png",
     category: "hoodies",
     sizes: ["S", "M", "L", "XL", "XXL"],
   },
@@ -33,8 +33,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description:
       "Washed black baggy denim with a chain of red northstars embroidered down every leg. Wide, stacked fit that breaks over the sneaker.",
     price: 280,
-    mainImage: "/products/northstar-baggy-jeans-front.jpg",
-    hoverImage: "/products/northstar-baggy-jeans-back.jpg",
+    mainImage: "/products/pic5.png",
+    hoverImage: "/products/pic1.png",
     category: "pants",
     sizes: ["S", "M", "L", "XL", "XXL"],
   },

@@ -16,15 +16,21 @@ export const site = {
   },
 } as const;
 
+// Grouped pack → hoodie → pants, like the shop. The pack/hoodie/pants main + hover pictures
+// (pic4/pic3, pic6/pic11, pic5/pic1) are the ones the products table points at.
 export const lookbook = [
-  { src: "/products/full-fit-pack-front.jpg", look: "LOOK 01", caption: "Red Pack — Front" },
-  { src: "/products/full-fit-pack-back.jpg", look: "LOOK 02", caption: "Red Pack — Back" },
-  { src: "/products/solar-sigil-hoodie-front.jpg", look: "LOOK 03", caption: "Red Hoodie — Front" },
-  { src: "/products/solar-sigil-hoodie-side.jpg", look: "LOOK 04", caption: "Red Hoodie — Profile" },
-  { src: "/products/solar-sigil-hoodie-back.jpg", look: "LOOK 05", caption: "Red Hoodie — Back" },
-  { src: "/products/northstar-baggy-jeans-front.jpg", look: "LOOK 06", caption: "Red Pants — Front" },
-  { src: "/products/northstar-baggy-jeans-side.jpg", look: "LOOK 07", caption: "Red Pants — Profile" },
-  { src: "/products/northstar-baggy-jeans-back.jpg", look: "LOOK 08", caption: "Red Pants — Back" },
+  { src: "/products/pic4.png", look: "LOOK 01", caption: "Red Pack — Front" },
+  { src: "/products/pic3.png", look: "LOOK 02", caption: "Red Pack — Profile" },
+  { src: "/products/pic9.png", look: "LOOK 03", caption: "Red Pack — Duo" },
+  { src: "/products/pic10.png", look: "LOOK 04", caption: "Red Pack — Low Angle" },
+  { src: "/products/pic6.png", look: "LOOK 05", caption: "Red Hoodie — Front" },
+  { src: "/products/pic7.png", look: "LOOK 06", caption: "Red Hoodie — Close Up" },
+  { src: "/products/pic12.png", look: "LOOK 07", caption: "Red Hoodie — Three-Quarter" },
+  { src: "/products/pic2.png", look: "LOOK 08", caption: "Red Hoodie — Duo" },
+  { src: "/products/pic8.png", look: "LOOK 09", caption: "Red Hoodie — Low Angle" },
+  { src: "/products/pic11.png", look: "LOOK 10", caption: "Red Hoodie — Back" },
+  { src: "/products/pic5.png", look: "LOOK 11", caption: "Red Pants — Detail" },
+  { src: "/products/pic1.png", look: "LOOK 12", caption: "Red Pants — Profile" },
 ] as const;
 
 export const moroccanCities = [

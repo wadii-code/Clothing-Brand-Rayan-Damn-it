@@ -29,7 +29,13 @@ export function Lookbook() {
   const barScale = useTransform(progress, [0, 1], [0, 1]);
 
   return (
-    <section id="lookbook" ref={sectionRef} className="relative h-[540vh] scroll-mt-20 bg-ink">
+    // Scroll length follows the number of looks (8 looks = the original 540vh) so the sideways pace stays the same.
+    <section
+      id="lookbook"
+      ref={sectionRef}
+      style={{ height: `${100 + lookbook.length * 55}vh` }}
+      className="relative scroll-mt-20 bg-ink"
+    >
       <div className="sticky top-0 flex h-svh flex-col justify-center overflow-hidden">
         <motion.div ref={trackRef} style={{ x }} className="flex h-full w-max items-center gap-6 pl-4 pr-[10vw] will-change-transform md:gap-10 md:pl-8">
           <div className="flex w-[85vw] shrink-0 flex-col justify-center md:w-[46vw]">
@@ -55,7 +61,7 @@ export function Lookbook() {
                   alt={look.caption}
                   fill
                   sizes="(min-width: 768px) 40vw, 80vw"
-                  className="object-cover grayscale-[70%] transition-[filter,transform] duration-1000 ease-out-expo group-hover:scale-105 group-hover:grayscale-0"
+                  className="object-cover transition-transform duration-1000 ease-out-expo group-hover:scale-105"
                 />
                 <span className="absolute top-3 left-3 bg-black/70 px-2 py-1 label-mono text-white backdrop-blur">
                   {look.look}

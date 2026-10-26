@@ -16,9 +16,9 @@ export function absoluteUrl(pathOrUrl: string): string {
 }
 
 export const defaultOgImage = {
-  url: "/products/lookbook-hoodie.jpg",
-  width: 2400,
-  height: 1090,
+  url: "/products/og-cover.jpg",
+  width: 1200,
+  height: 630,
   alt: `${site.name} — ${site.tagline}`,
 };
 
