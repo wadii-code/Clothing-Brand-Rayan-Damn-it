@@ -11,8 +11,8 @@ export const site = {
     "You pay in cash when the package reaches your door. We call you to confirm before shipping.",
   // Empty = hidden in the footer.
   social: {
-    instagram: "https://www.instagram.com/skiro_store925/",
-    tiktok: "",
+    instagram: "https://www.instagram.com/skiro.925/",
+    tiktok: "https://www.tiktok.com/@skiro_925",
   },
 } as const;
 

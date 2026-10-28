@@ -37,6 +37,10 @@ yarn-error.log*
 # supabase
 /supabase
 
+# source photos and transfer archives (hundreds of MB of RAW files): keep them out of the repo
+/real images/
+*.zip
+
 # vercel
 .vercel
 

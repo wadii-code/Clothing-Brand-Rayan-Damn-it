@@ -37,7 +37,8 @@ export function Footer() {
           {socials.length > 0 && (
             <div>
               <p className="label-mono text-white/40">Follow</p>
-              <ul className="mt-4 space-y-2 text-sm uppercase">
+              {/* Side by side: Instagram and TikTok sit on one row (wrapping only on very narrow screens). */}
+              <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm uppercase">
                 {socials.map((s) => (
                   <li key={s.label}>
                     <a href={s.href} target="_blank" rel="noreferrer" className="hover:text-blood">{s.label}</a>
