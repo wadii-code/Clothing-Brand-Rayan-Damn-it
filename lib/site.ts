@@ -2,7 +2,7 @@ export const site = {
   name: "SKIRO",
   tagline: "Underground wear for the unforgiven",
   description:
-    "SKIRO — dark, underground streetwear from Morocco. Embroidered hoodies and baggy denim. Order online, free delivery, pay cash on delivery.",
+    "SKIRO , dark, underground streetwear from Morocco. Embroidered hoodies and baggy denim. Order online, free delivery, pay cash on delivery.",
   drop: "DROP 01",
   season: "SS—26",
   marqueePrimary: ["SKIRO", "CASH ON DELIVERY", "FREE DELIVERY", "DROP 01", "NO CARD NEEDED"],
