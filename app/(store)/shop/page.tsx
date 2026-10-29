@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
+import { OnModel } from "@/components/product/on-model";
 import { ShopGrid } from "@/components/product/shop-grid";
 import { getProducts } from "@/lib/products";
 import { breadcrumbJsonLd, pageSeo, productListJsonLd } from "@/lib/seo";
@@ -26,6 +27,7 @@ export default async function ShopPage() {
       </h1>
       <h2 className="sr-only">All pieces</h2>
       <ShopGrid products={products} />
+      <OnModel products={products} />
       <JsonLd
         data={[
           productListJsonLd(products),

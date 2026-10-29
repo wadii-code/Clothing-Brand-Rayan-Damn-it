@@ -9,7 +9,7 @@ import { Star } from "@/components/ui/star";
 import { formatPrice } from "@/lib/format";
 import { getProductBySlug, getProducts } from "@/lib/products";
 import { breadcrumbJsonLd, pageSeo, productJsonLd, productPath } from "@/lib/seo";
-import { site } from "@/lib/site";
+import { productExtraImages, site } from "@/lib/site";
 
 export const revalidate = 60;
 
@@ -56,7 +56,9 @@ export default async function ProductPage(props: PageProps<"/product/[slug]">) {
   if (!product) notFound();
 
   const related = (await getProducts()).filter((p) => p.id !== product.id).slice(0, 4);
-  const images = [product.mainImage, product.hoverImage].filter((src): src is string => Boolean(src));
+  const images = [product.mainImage, product.hoverImage, ...(productExtraImages[product.slug] ?? [])].filter(
+    (src, i, all): src is string => Boolean(src) && all.indexOf(src) === i,
+  );
 
   return (
     <>

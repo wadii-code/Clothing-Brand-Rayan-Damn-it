@@ -9,8 +9,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description:
       "The full fit in one box: the Red Hoodie and the Red Pants. Pick a size for each piece. 68 DH less than buying them apart.",
     price: 450,
-    mainImage: "/products/pic4.png",
-    hoverImage: "/products/pic3.png",
+    mainImage: "/products/hiba2.jpeg",
+    hoverImage: "/products/pic4.png",
     category: "pack",
     sizes: ["M", "L", "XL", "XXL"],
   },
