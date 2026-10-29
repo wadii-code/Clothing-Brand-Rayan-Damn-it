@@ -49,7 +49,7 @@ export const lookbook = [
 export const productExtraImages: Record<string, readonly string[]> = {
   "red-pack": [HIBA.seated, "/products/pic3.png", HIBA.lakeside],
   "red-hoodie": [HIBA.lakeside, HIBA.sky],
-  "red-pants": [HIBA.seated],
+  "red-pants": ["/products/pic3.png", "/products/pic1.png", HIBA.seated],
 };
 
 // The shop's "on model" strip, pack → hoodie like the grid: each photo links to the piece it shows.

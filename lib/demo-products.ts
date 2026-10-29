@@ -33,8 +33,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description:
       "Washed black baggy denim with a chain of red northstars embroidered down every leg. Wide, stacked fit that breaks over the sneaker.",
     price: 259,
-    mainImage: "/products/pic5.png",
-    hoverImage: "/products/pic1.png",
+    mainImage: "/products/pic3.png",
+    hoverImage: "/products/pic5.png",
     category: "pants",
     sizes: ["M", "L", "XL", "XXL"],
   },
