@@ -34,7 +34,7 @@ const SHOOT = {
 } as const;
 
 // Grouped pack → hoodie → pants, like the shop. The pack/hoodie/pants main + hover pictures
-// (hiba2/pic4, pic6/pic11, pic3/pic5) are the ones the products table points at.
+// (hiba2/pic4, ray2/pic6, pic5/pic3) are the ones the products table points at.
 // The "LOOK 01…" labels are numbered from the order here.
 export const lookbook = [
   { src: "/products/pic4.png", caption: "Red Pack — Front" },
@@ -64,7 +64,7 @@ export const lookbook = [
 // are dropped from the gallery, so this list stays valid before and after the table is updated.
 export const productExtraImages: Record<string, readonly string[]> = {
   "red-pack": [HIBA.seated, "/products/pic3.png", SHOOT.duoSeated, SHOOT.duoClose, HIBA.lakeside],
-  "red-hoodie": [SHOOT.masked, HIBA.lakeside, SHOOT.sleeve, HIBA.sky],
+  "red-hoodie": [SHOOT.masked, "/products/pic11.png", HIBA.lakeside, SHOOT.sleeve, HIBA.sky],
   "red-pants": ["/products/pic3.png", SHOOT.fullLook, "/products/pic1.png", HIBA.seated],
 };
 

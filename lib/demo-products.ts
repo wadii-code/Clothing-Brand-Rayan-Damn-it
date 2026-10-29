@@ -21,8 +21,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description:
       "Heavyweight black fleece hoodie. Blood-red Solar Sigil embroidered across the back, northstar chain running down both sleeves. Oversized, dropped shoulders.",
     price: 259,
-    mainImage: "/products/pic6.png",
-    hoverImage: "/products/pic11.png",
+    mainImage: "/products/ray2.jpg",
+    hoverImage: "/products/pic6.png",
     category: "hoodies",
     sizes: ["S", "M", "L", "XL"],
   },
@@ -33,8 +33,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description:
       "Washed black baggy denim with a chain of red northstars embroidered down every leg. Wide, stacked fit that breaks over the sneaker.",
     price: 259,
-    mainImage: "/products/pic3.png",
-    hoverImage: "/products/pic5.png",
+    mainImage: "/products/pic5.png",
+    hoverImage: "/products/pic3.png",
     category: "pants",
     sizes: ["S", "M", "L", "XL"],
   },
