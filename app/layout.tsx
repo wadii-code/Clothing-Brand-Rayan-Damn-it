@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Providers } from "@/components/providers";
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-svh bg-ink text-bone antialiased">
         <Providers>{children}</Providers>
         <div aria-hidden className="grain" />
+        <Analytics />
       </body>
     </html>
   );
