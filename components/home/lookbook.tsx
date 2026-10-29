@@ -64,7 +64,7 @@ export function Lookbook() {
                   className="object-cover transition-transform duration-1000 ease-out-expo group-hover:scale-105"
                 />
                 <span className="absolute top-3 left-3 bg-black/70 px-2 py-1 label-mono text-white backdrop-blur">
-                  {look.look}
+                  LOOK {String(i + 1).padStart(2, "0")}
                 </span>
               </div>
               <figcaption className="mt-3 flex items-center justify-between gap-6 label-mono text-white/50">

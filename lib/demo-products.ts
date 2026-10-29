@@ -12,7 +12,7 @@ export const DEMO_PRODUCTS: Product[] = [
     mainImage: "/products/hiba2.jpeg",
     hoverImage: "/products/pic4.png",
     category: "pack",
-    sizes: ["M", "L", "XL", "XXL"],
+    sizes: ["S", "M", "L", "XL"],
   },
   {
     id: "6f1c2d3e-4b5a-4c6d-8e7f-9a0b1c2d3e4f",
@@ -24,7 +24,7 @@ export const DEMO_PRODUCTS: Product[] = [
     mainImage: "/products/pic6.png",
     hoverImage: "/products/pic11.png",
     category: "hoodies",
-    sizes: ["M", "L", "XL", "XXL"],
+    sizes: ["S", "M", "L", "XL"],
   },
   {
     id: "7a2b3c4d-5e6f-4a7b-9c8d-0e1f2a3b4c5d",
@@ -36,6 +36,6 @@ export const DEMO_PRODUCTS: Product[] = [
     mainImage: "/products/pic3.png",
     hoverImage: "/products/pic5.png",
     category: "pants",
-    sizes: ["M", "L", "XL", "XXL"],
+    sizes: ["S", "M", "L", "XL"],
   },
 ];

@@ -23,40 +23,59 @@ const HIBA = {
   sky: "/products/hiba3.jpeg",
 } as const;
 
+// Web-sized copies of the full-resolution shoot (originals live in "real images/", kept out of the
+// repo). The landscape ray shots were cropped to 3:4 around him, like every photo slot on the site.
+const SHOOT = {
+  duoClose: "/products/both1.jpg",
+  duoSeated: "/products/both2.jpg",
+  sleeve: "/products/ray1.jpg",
+  masked: "/products/ray2.jpg",
+  fullLook: "/products/ray3.jpg",
+} as const;
+
 // Grouped pack → hoodie → pants, like the shop. The pack/hoodie/pants main + hover pictures
-// (pic4/pic3, pic6/pic11, pic5/pic1) are the ones the products table points at.
+// (hiba2/pic4, pic6/pic11, pic3/pic5) are the ones the products table points at.
+// The "LOOK 01…" labels are numbered from the order here.
 export const lookbook = [
-  { src: "/products/pic4.png", look: "LOOK 01", caption: "Red Pack — Front" },
-  { src: "/products/pic3.png", look: "LOOK 02", caption: "Red Pack — Profile" },
-  { src: "/products/pic9.png", look: "LOOK 03", caption: "Red Pack — Duo" },
-  { src: "/products/pic10.png", look: "LOOK 04", caption: "Red Pack — Low Angle" },
-  { src: HIBA.seated, look: "LOOK 05", caption: "Red Pack — Seated" },
-  { src: "/products/pic6.png", look: "LOOK 06", caption: "Red Hoodie — Front" },
-  { src: HIBA.lakeside, look: "LOOK 07", caption: "Red Hoodie — Lakeside" },
-  { src: "/products/pic7.png", look: "LOOK 08", caption: "Red Hoodie — Close Up" },
-  { src: "/products/pic12.png", look: "LOOK 09", caption: "Red Hoodie — Three-Quarter" },
-  { src: "/products/pic2.png", look: "LOOK 10", caption: "Red Hoodie — Duo" },
-  { src: "/products/pic8.png", look: "LOOK 11", caption: "Red Hoodie — Low Angle" },
-  { src: HIBA.sky, look: "LOOK 12", caption: "Red Hoodie — Blue Sky" },
-  { src: "/products/pic11.png", look: "LOOK 13", caption: "Red Hoodie — Back" },
-  { src: "/products/pic5.png", look: "LOOK 14", caption: "Red Pants — Detail" },
-  { src: "/products/pic1.png", look: "LOOK 15", caption: "Red Pants — Profile" },
+  { src: "/products/pic4.png", caption: "Red Pack — Front" },
+  { src: "/products/pic3.png", caption: "Red Pack — Profile" },
+  { src: "/products/pic9.png", caption: "Red Pack — Duo" },
+  { src: "/products/pic10.png", caption: "Red Pack — Low Angle" },
+  { src: HIBA.seated, caption: "Red Pack — Seated" },
+  { src: SHOOT.duoClose, caption: "Red Pack — Close Duo" },
+  { src: SHOOT.duoSeated, caption: "Red Pack — Seated Duo" },
+  { src: "/products/pic6.png", caption: "Red Hoodie — Front" },
+  { src: HIBA.lakeside, caption: "Red Hoodie — Lakeside" },
+  { src: "/products/pic7.png", caption: "Red Hoodie — Close Up" },
+  { src: "/products/pic12.png", caption: "Red Hoodie — Three-Quarter" },
+  { src: "/products/pic2.png", caption: "Red Hoodie — Duo" },
+  { src: "/products/pic8.png", caption: "Red Hoodie — Low Angle" },
+  { src: HIBA.sky, caption: "Red Hoodie — Blue Sky" },
+  { src: SHOOT.sleeve, caption: "Red Hoodie — Sleeve" },
+  { src: SHOOT.masked, caption: "Red Hoodie — Masked" },
+  { src: "/products/pic11.png", caption: "Red Hoodie — Back" },
+  { src: "/products/pic5.png", caption: "Red Pants — Detail" },
+  { src: "/products/pic1.png", caption: "Red Pants — Profile" },
+  { src: SHOOT.fullLook, caption: "Red Pants — Full Look" },
 ] as const;
 
 // Extra pictures appended to a product page's gallery, by product slug. Code-side on purpose: the
 // products table only holds a main and a hover picture. Pictures already used as the main/hover one
 // are dropped from the gallery, so this list stays valid before and after the table is updated.
 export const productExtraImages: Record<string, readonly string[]> = {
-  "red-pack": [HIBA.seated, "/products/pic3.png", HIBA.lakeside],
-  "red-hoodie": [HIBA.lakeside, HIBA.sky],
-  "red-pants": ["/products/pic3.png", "/products/pic1.png", HIBA.seated],
+  "red-pack": [HIBA.seated, "/products/pic3.png", SHOOT.duoSeated, SHOOT.duoClose, HIBA.lakeside],
+  "red-hoodie": [SHOOT.masked, HIBA.lakeside, SHOOT.sleeve, HIBA.sky],
+  "red-pants": ["/products/pic3.png", SHOOT.fullLook, "/products/pic1.png", HIBA.seated],
 };
 
-// The shop's "on model" strip, pack → hoodie like the grid: each photo links to the piece it shows.
+// The shop's "on model" strip, pack → hoodie → pants like the grid: each photo links to the piece it shows.
 export const modelShots = [
   { src: HIBA.seated, slug: "red-pack", caption: "Red Pack — Seated" },
+  { src: SHOOT.duoSeated, slug: "red-pack", caption: "Red Pack — Seated Duo" },
   { src: HIBA.lakeside, slug: "red-hoodie", caption: "Red Hoodie — Lakeside" },
+  { src: SHOOT.masked, slug: "red-hoodie", caption: "Red Hoodie — Masked" },
   { src: HIBA.sky, slug: "red-hoodie", caption: "Red Hoodie — Blue Sky" },
+  { src: SHOOT.fullLook, slug: "red-pants", caption: "Red Pants — Full Look" },
 ] as const;
 
 export const moroccanCities = [
