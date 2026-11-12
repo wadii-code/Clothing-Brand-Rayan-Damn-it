@@ -1,3 +1,4 @@
+import { productImages } from "./site";
 import type { Product } from "./types";
 
 // Fallback when Supabase env vars are missing. Mirrors the seed in supabase/schema.sql.
@@ -9,8 +10,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description:
       "The full fit in one box: the Red Hoodie and the Red Pants. Pick a size for each piece. 68 DH less than buying them apart.",
     price: 450,
-    mainImage: "/products/hiba2.jpeg",
-    hoverImage: "/products/pic4.png",
+    mainImage: productImages["red-pack"].main,
+    hoverImage: productImages["red-pack"].hover,
     category: "pack",
     sizes: ["S", "M", "L", "XL"],
   },
@@ -21,8 +22,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description:
       "Heavyweight black fleece hoodie. Blood-red Solar Sigil embroidered across the back, northstar chain running down both sleeves. Oversized, dropped shoulders.",
     price: 259,
-    mainImage: "/products/ray2.jpg",
-    hoverImage: "/products/pic6.png",
+    mainImage: productImages["red-hoodie"].main,
+    hoverImage: productImages["red-hoodie"].hover,
     category: "hoodies",
     sizes: ["S", "M", "L", "XL"],
   },
@@ -33,8 +34,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description:
       "Washed black baggy denim with a chain of red northstars embroidered down every leg. Wide, stacked fit that breaks over the sneaker.",
     price: 259,
-    mainImage: "/products/pic5.png",
-    hoverImage: "/products/pic3.png",
+    mainImage: productImages["red-pants"].main,
+    hoverImage: productImages["red-pants"].hover,
     category: "pants",
     sizes: ["S", "M", "L", "XL"],
   },

@@ -7,7 +7,7 @@ import { lookbook } from "@/lib/site";
 
 // One row of portrait cards drifting left. Each card has a "depth": deeper cards run faster, sit
 // bigger, tilt more in 3D and shift more as you scroll, so they overlap and pass each other.
-// Same pictures as the lookbook, in the same order (pack → hoodie → pants).
+// Same pictures as the lookbook, in the same mixed order.
 const DEPTH = [20, 90, -40, 60, 0, 120, -30, 70, 10, 100, -50, 40];
 const LIFT = [0, -0.12, 0.1, -0.06, 0.14, -0.1, 0.05, -0.14, 0.08, -0.04, 0.12, -0.08]; // × card height
 

@@ -7,6 +7,7 @@ import { AnimatePresence, motion, useInView, wrap, type Variants } from "framer-
 import type { Product } from "@/lib/types";
 import { formatPrice } from "@/lib/format";
 import { isPack } from "@/lib/pack";
+import { featuredShots } from "@/lib/site";
 import { useCheckout } from "../checkout/checkout-provider";
 import { PackGiftLine } from "../pack/pack-gift";
 import { Arrow } from "../ui/arrow";
@@ -44,6 +45,10 @@ export function FeaturedSlider({ products }: { products: Product[] }) {
   const count = products.length;
   const index = wrap(0, count, page);
   const product = products[index];
+  // Its own frames when the shoot has them, so the carousel never repeats the product card above.
+  const shot = product ? featuredShots[product.slug] : undefined;
+  const mainSrc = shot?.main ?? product?.mainImage;
+  const insetSrc = shot?.inset ?? product?.hoverImage;
 
   const paginate = useCallback((dir: number) => setPage(([p]) => [p + dir, dir]), []);
 
@@ -53,7 +58,7 @@ export function FeaturedSlider({ products }: { products: Product[] }) {
     return () => clearTimeout(timer);
   }, [page, inView, count, paginate]);
 
-  if (!product) return null;
+  if (!product || !mainSrc) return null;
 
   return (
     <section
@@ -75,7 +80,7 @@ export function FeaturedSlider({ products }: { products: Product[] }) {
           transition={{ duration: 1.2 }}
           className="absolute inset-0 -z-10"
         >
-          <Image src={product.mainImage} alt="" fill sizes="30vw" className="scale-125 object-cover opacity-30 blur-3xl" />
+          <Image src={mainSrc} alt="" fill sizes="30vw" className="scale-125 object-cover opacity-30 blur-3xl" />
         </motion.div>
       </AnimatePresence>
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_70%_50%,transparent,rgba(0,0,0,0.85)_70%)]" />
@@ -213,7 +218,7 @@ export function FeaturedSlider({ products }: { products: Product[] }) {
                   className="absolute inset-0"
                 >
                   <Image
-                    src={product.mainImage}
+                    src={mainSrc}
                     alt={product.name}
                     fill
                     draggable={false}
@@ -224,7 +229,7 @@ export function FeaturedSlider({ products }: { products: Product[] }) {
               </AnimatePresence>
             </div>
 
-            {product.hoverImage && (
+            {insetSrc && (
               <div className="absolute -bottom-8 -left-4 hidden aspect-[3/4] w-[34%] overflow-hidden border-4 border-coal bg-smoke shadow-2xl sm:block md:-left-16">
                 <AnimatePresence initial={false} custom={direction}>
                   <motion.div
@@ -237,7 +242,7 @@ export function FeaturedSlider({ products }: { products: Product[] }) {
                     transition={{ delay: 0.15 }}
                     className="absolute inset-0"
                   >
-                    <Image src={product.hoverImage} alt="" fill draggable={false} sizes="200px" className="object-cover" />
+                    <Image src={insetSrc} alt="" fill draggable={false} sizes="200px" className="object-cover" />
                   </motion.div>
                 </AnimatePresence>
               </div>

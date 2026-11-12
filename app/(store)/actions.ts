@@ -3,7 +3,7 @@
 import { updateTag } from "next/cache";
 import { getSupabaseAdmin } from "@/lib/supabase/server";
 import { orderRef } from "@/lib/format";
-import { PACK_GIFT, isPack, packSizeLabel } from "@/lib/pack";
+import { PACK_GIFT, giftsTaken, isPack, packSizeLabel } from "@/lib/pack";
 import { PACK_GIFT_TAG, countPackOrders } from "@/lib/pack-gift";
 import {
   firstFieldErrors,
@@ -78,7 +78,7 @@ export async function placeOrder(_prev: OrderFormState, formData: FormData): Pro
   let giftNumber = 0;
   if (pack) {
     try {
-      const taken = await countPackOrders(supabase, product.id);
+      const taken = giftsTaken(await countPackOrders(supabase, product.id));
       if (taken < PACK_GIFT.total) giftNumber = taken + 1;
     } catch (error) {
       console.error("[skiro] gift count failed, order kept without gift", error);

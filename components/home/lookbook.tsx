@@ -46,7 +46,7 @@ export function Lookbook() {
               <span className="text-outline-red">book</span>
             </h2>
             <p className="mt-6 max-w-sm text-sm uppercase leading-relaxed text-white/50">
-              Shot against raw concrete. Black cotton, red thread, no compromise. Keep scrolling →
+              Shot in the street, by the river, after dark. Black cotton, red thread, no compromise. Keep scrolling →
             </p>
           </div>
 
@@ -55,7 +55,11 @@ export function Lookbook() {
               key={look.src}
               className={`group relative shrink-0 ${i % 2 === 0 ? "self-start mt-[12svh]" : "self-end mb-[12svh]"}`}
             >
-              <div className="relative h-[58svh] overflow-hidden bg-smoke md:h-[68svh]" style={{ aspectRatio: "3 / 4.2" }}>
+              {/* A wide look is a landscape card: a shorter, broader frame that breaks the portrait rhythm. */}
+              <div
+                className={`relative overflow-hidden bg-smoke ${look.wide ? "h-[42svh] md:h-[50svh]" : "h-[58svh] md:h-[68svh]"}`}
+                style={{ aspectRatio: look.wide ? "4 / 3" : "3 / 4.2" }}
+              >
                 <Image
                   src={look.src}
                   alt={look.caption}
